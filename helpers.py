@@ -1,17 +1,13 @@
-from bs4 import BeautifulSoup as bs
+from selenium.webdriver.remote.webelement import WebElement
+from selenium.webdriver.remote.webdriver import WebDriver
 
-from functools import wraps
 import typing
 import random
 import time
 
 
-def find_links(soup: bs, options: dict = None) -> list:
-    if not options:
-        options = {}
-    links = soup.find_all("a", **options)
-
-    return links
+def scroll_into_view(driver: WebDriver, element: WebElement) -> None:
+    driver.execute_script("arguments[0].scrollIntoView();", element)
 
 
 class sleeper:
@@ -57,25 +53,27 @@ def progress(func: typing.Generator[int, typing.Any, typing.Any]) -> typing.Call
     length: int = 30
 
     def wrapper(self, *args: typing.Any, **kwargs: typing.Any) -> typing.Any:
-        total = self._total
-        current = 1
+        current = 0
 
         print(
             format_.format(
                 done="#" * 0,
                 do=" " * length,
                 percent=0,
-            )
+            ),
+            end="\r"
         )
         try:
             while True:
                 value = next(func(self, *args, **kwargs))
 
+                current += value
+                total = self.total
                 percent = current / total
+                percent = 1 if percent > 1 else percent
                 n_fill = int(percent * length)
                 n_empty = length - n_fill
 
-                current += value
                 print(
                     format_.format(
                         done="#" * n_fill,

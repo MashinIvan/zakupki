@@ -11,6 +11,9 @@ bs4 = "*"
 fire = "*"
 lxml = "*"
 pydantic = "*"
+selenium = "*"
+python-dateutil = "*"
+pandas = "*"
 
 [requires]
 python_version = "3.8"
