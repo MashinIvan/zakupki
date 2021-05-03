@@ -3,6 +3,7 @@ import fire
 
 from scraper.main import Scraper
 
+from datetime import datetime
 import dataclasses
 import logging
 import typing
@@ -40,7 +41,8 @@ class Runner:
                     )
 
         data_frame = pd.DataFrame(rows)
-        data_frame.to_csv('storage/data.csv', sep=';')
+        name = "storage/data_{}.csv".format(datetime.now().strftime("%m-%d_%H-%M-%S"))
+        data_frame.to_csv(name, sep=';')
 
 
 if __name__ == "__main__":
